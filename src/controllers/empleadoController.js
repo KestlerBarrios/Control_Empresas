@@ -1,7 +1,5 @@
 'use strict'
 
-const fs = require("fs");
-const PDFDocument = require("pdfkit");
 const Empleado = require('../models/Empleado')
 
 function crearEmpleado(req, res) {
@@ -84,23 +82,11 @@ function listarEmpleados(req, res) {
     })
 }
 
-function createPDF(Empleado, ruta) {
-    let doc = new PDFDocument({ margin: 50 });
-    ruta = '/Kestler Barrios/ejemplo.pdf'
-    generateHeader(doc);
-    generateCustomerInformation(doc, Empleado);
-    generateInvoiceTable(doc, Empleado);
-    generateFooter(doc);
-    doc.pipe(fs.createWriteStream(ruta));
-    doc.end();
-
-}
-
 module.exports = {
     crearEmpleado,
     editarEmpleado,
     eliminarEmpleado,
     buscarEmpleado,
     listarEmpleados,
-    createPDF
+    
 }

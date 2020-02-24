@@ -9,6 +9,5 @@ api.put('/editar-empleado/:id', EmpleadoController.editarEmpleado)
 api.delete('/eliminar-empleado/:id', EmpleadoController.eliminarEmpleado)
 api.get('/buscar-empleado', EmpleadoController.buscarEmpleado)
 api.get('/listar-empleados', EmpleadoController.listarEmpleados)
-api.get('/pdf', EmpleadoController.createPDF)
 
 module.exports = api
