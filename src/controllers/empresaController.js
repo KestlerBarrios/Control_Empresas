@@ -68,6 +68,9 @@ function login(req, res) {
 function editarEmpresa(req, res) {
     const empresaId = req.params.id
     const params = req.body
+    if(empresaId != req.empresa.sub) {
+        return res.status(500).send({ message: 'No posee los permisos para actualizar el usuario' })
+    }
     Empresa.findByIdAndUpdate(empresaId, params, { new: true }, (err, empresaActualizada) => {
         if (err) return res.status(500).send({ message: 'Error en la peticion' })
         if (!empresaActualizada) return res.status(404).send({ message: 'No se ha podido editar la Empresa' })
