@@ -12,18 +12,18 @@ function RegistrarEmpresa(req, res) {
 
     if (params.nombre && params.password && params.email) {
         empresa.nombre = params.nombre
-        user.usuario = params.usuario
-        user.email = params.email
+        empresa.usuario = params.usuario
+        empresa.email = params.email
         empresa.contacto = params.contacto
         empresa.direccion = params.direccion
 
         Empresa.find({ $or: [{ usuario: empresa.usuario }, { email: empresa.email }] }).exec((err, empresas) => {
             if (err) return res.status(500).send({ message: 'Error en la peticion de usuario.' })
-            if (emrpesas && empresas.length >= 1) {
+            if (empresas && empresas.length >= 1) {
                 return res.status(500).send({ message: 'La empresa ya existe' })
             } else {
                 bcrypt.hash(params.password, null, null, (err, hash) => {
-                    user.password = hash
+                    empresa.password = hash
                     empresa.save((err, empresaGuardada) => {
                         if (err) return res.status(500).send({ message: 'Error al guardar la Empresa.' })
                         if (empresaGuardada) {
