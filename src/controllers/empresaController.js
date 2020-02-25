@@ -81,6 +81,10 @@ function editarEmpresa(req, res) {
 
 function eliminarEmpresa(req, res) {
     const empresaId = req.params.id
+
+    if(empresaId != req.empresa.sub) {
+        return res.status(500).send({ message: 'No posee los permisos para actualizar el usuario' })
+    }
     Empresa.findByIdAndDelete(empresaId, (err, empresaDeleted) => {
         Empleado.deleteMany({ empresa: empresaId }, (err) => {
             if (err) return res.status(500).send({ message: 'Error en la peticion' })
