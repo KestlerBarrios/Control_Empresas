@@ -1,6 +1,5 @@
 'use strict'
 
-const Empresa = require('../models/Empresa')
 const Sucursal = require('../models/Sucursal')
 
 function crearSucursal(req, res) {
@@ -26,7 +25,7 @@ function crearSucursal(req, res) {
 function editarSucursal(req, res) {
     const sucursalId = req.params.id
     const params = req.body
-    
+
     if (sucursalId != req.empresa.sub) {
         return res.status(500).send({ message: 'No posee los permisos para actualizar el usuario' })
     }
@@ -42,12 +41,12 @@ function eliminarSucursal(req, res) {
     const sucursalId = req.params.id
 
     if (sucursalId != req.empresa.sub) {
-        return res.status(500).send({ message: 'No posee los permisos para actualizar el usuario' })
+        return res.status(500).send({ message: 'No posee los permisos para actualizar la sucursal' })
     }
-    Empresa.findByIdAndDelete(sucursalId, (err, empresaDeleted) => {
+    Sucursal.findByIdAndDelete(sucursalId, (err, empresaDeleted) => {
         Empleado.deleteMany({ empresa: sucursalId }, (err) => {
             if (err) return res.status(500).send({ message: 'Error en la peticion' })
-            return res.status(200).send({ message: 'Empresa Eliminada', empresaEliminada: empresaDeleted })
+            return res.status(200).send({ message: 'Sucursal Eliminada', empresaEliminada: empresaDeleted })
         })
     })
 }
