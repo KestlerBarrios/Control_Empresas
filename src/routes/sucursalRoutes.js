@@ -9,6 +9,7 @@ var api = express.Router()
 api.post('/crear-sucursal/:empresaId', SucursalController.crearSucursal)
 api.put('/editar-sucursal/:empresaId/:id', md_auth.ensureAuth, SucursalController.editarSucursal)
 api.delete('/eliminar-sucursal/:empresaId/:id', md_auth.ensureAuth, SucursalController.eliminarSucursal)
+api.get('/listar-sucursales', md_auth.ensureAuth, SucursalController.listarSucursales)
 
 
 module.exports = api

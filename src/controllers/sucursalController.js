@@ -48,8 +48,16 @@ function eliminarSucursal(req, res) {
     })
 }
 
+function listarSucursales(req, res) {
+    Sucursal.find().exec((error, sucursales) => {
+        if (error) return res.status(500).send({ message: 'Error en la peticion' })
+        return res.status(200).send({ sucursales: sucursales })
+    })
+}
+
 module.exports = {
     crearSucursal,
     editarSucursal,
-    eliminarSucursal
+    eliminarSucursal,
+    listarSucursales,
 }

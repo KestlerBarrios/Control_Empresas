@@ -5,10 +5,6 @@ const Schema = mongoose.Schema
 
 var SucursalSchema = Schema({
     nombre: String,
-    productos: {
-        nombre: String,
-        cantidad: Number,
-    },
     empresa: { type: Schema.ObjectId, ref: 'empresa' }
 })
 

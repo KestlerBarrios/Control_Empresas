@@ -1,10 +1,11 @@
 'use strict'
 
 const bcrypt = require("bcrypt-nodejs")
+const jwt = require('../services/jwt')
 
 const Empresa = require('../models/Empresa')
 const Empleado = require('../models/Empleado')
-const jwt = require('../services/jwt')
+const Sucursal = require('../models/Sucursal')
 
 function RegistrarEmpresa(req, res) {
     var empresa = new Empresa()
@@ -52,13 +53,13 @@ function login(req, res) {
                         return res.status(200).send({ token: jwt.createToken(empresa) })
                     } else {
                         usuario.password = undefined
-                        return res.status(200).send({empresa: usuario})
+                        return res.status(200).send({ empresa: usuario })
                     }
-                }else {
-                    res.status(404).send({message: 'La Empresa no se pudo identificar'})
+                } else {
+                    res.status(404).send({ message: 'La Empresa no se pudo identificar' })
                 }
             })
-        }else {
+        } else {
             return res.status(404).send({ message: 'La Empresa no se ha podido logear' })
         }
     })
@@ -68,7 +69,7 @@ function login(req, res) {
 function editarEmpresa(req, res) {
     const empresaId = req.params.id
     const params = req.body
-    if(empresaId != req.empresa.sub) {
+    if (empresaId != req.empresa.sub) {
         return res.status(500).send({ message: 'No posee los permisos para actualizar el usuario' })
     }
     Empresa.findByIdAndUpdate(empresaId, params, { new: true }, (err, empresaActualizada) => {
@@ -82,13 +83,16 @@ function editarEmpresa(req, res) {
 function eliminarEmpresa(req, res) {
     const empresaId = req.params.id
 
-    if(empresaId != req.empresa.sub) {
+    if (empresaId != req.empresa.sub) {
         return res.status(500).send({ message: 'No posee los permisos para actualizar el usuario' })
     }
     Empresa.findByIdAndDelete(empresaId, (err, empresaDeleted) => {
-        Empleado.deleteMany({ empresa: empresaId }, (err) => {
-            if (err) return res.status(500).send({ message: 'Error en la peticion' })
-            return res.status(200).send({ message: 'Empresa Eliminada', empresaEliminada: empresaDeleted })
+        Sucursal.deleteMany({ empresa: empresaId }, (err) => {
+            if (err) return res.status(500).send({message: 'Error en la peticion'})
+            Empleado.deleteMany({ empresa: empresaId }, (err) => {
+                if (err) return res.status(500).send({ message: 'Error en la peticion' })
+                return res.status(200).send({ message: 'Empresa Eliminada', empresaEliminada: empresaDeleted })
+            })
         })
     })
 }
